@@ -11,9 +11,12 @@ from itemadapter import ItemAdapter
 class AldiCrawlPipeline:
     def process_item(self, item, spider):
         adapter = ItemAdapter(item)
-        if len(adapter['value_price']) == 2 and adapter['value_price'][1] == 'c':
+        adapter['product_title'] = ' '.join(adapter['product_title']).strip()
+        if not adapter['value_price']:
+            adapter['value_price'] = 'see price in store*'
+        elif len(adapter['value_price']) == 2 and adapter['value_price'][1] == 'c':
             try:
-                adapter['price'] = float('0.{}'.format(adapter['price'][0]))
+                adapter['price'] = float('0.{}'.format(adapter['value_price'][0]))
             except ValueError as e:
                 adapter['price'] = 'err'
         else:
@@ -24,4 +27,5 @@ class AldiCrawlPipeline:
                 adapter['price'] = 'err'
         del(adapter['value_price'])
         del(adapter['decimal_price'])
+        del(adapter['category'])
         return item

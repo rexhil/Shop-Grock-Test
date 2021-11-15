@@ -14,4 +14,5 @@ class AldiCrawlItem(scrapy.Item):
     pack_size = scrapy.Field()
     price_per_unit = scrapy.Field()
     price = scrapy.Field()
+    category = scrapy.Field()
     pass
